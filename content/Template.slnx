@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/src/Client/">
+    <File Path="src/Client/Directory.Build.props" />    
+    <Project Path="src/Client/Template.Client/Template.Client.csproj" />
+  </Folder>
+  <Folder Name="/src/Server/">
+    <File Path="src/Server/Directory.Build.props" />
+    <Project Path="src/Server/Template.Server/Template.Server.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <File Path="src/Directory.Build.props" />
+    <File Path="src/Directory.Build.targets" />
+  </Folder>
+  <Folder Name="/assets/">
+    <File Path="assets/fxmanifest.lua" />
+  </Folder>
+</Solution>

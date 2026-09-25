@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "RickyB505",
+  "classifications": [ "FiveM", "CitizenFX", "C#" ],
+  "identity": "Ricky.FiveM.ScriptTemplate.CSharp",
+  "name": "FiveM C# Client/Server Script",
+  "shortName": "fivem-template",
+  "tags": {
+    "language": "C#",
+    "type": "solution"
+  },
+  "sourceName": "Template",
+  "preferNameDirectory": true,
+  "symbols": {
+    "TemplateResourceAuthor": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "your-name",
+      "replaces": "TemplateResourceAuthor",
+      "description": "Author name written into fxmanifest.lua."
+    },
+    "TemplateResourceDescription": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "A CitizenFX script generated from a template.",
+      "replaces": "TemplateResourceDescription",
+      "description": "Description written into fxmanifest.lua."
+    }
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "exclude": [ "**/bin/**", "**/obj/**", "**/.vs/**", "**/*.user" ]
+        }
+      ]
+    }
+  ]
+}

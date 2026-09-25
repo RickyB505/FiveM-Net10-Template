@@ -1,0 +1,9 @@
+﻿<Project>
+
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+    <ItemGroup>
+        <PackageReference Include="CitizenFX.FiveM.Client" Version="0.0.4-alpha" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,1 @@
+# FiveM C# Script Template

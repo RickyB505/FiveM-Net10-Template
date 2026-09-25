@@ -1,0 +1,19 @@
+﻿<Project>
+
+    <Target Name="RemoveHostAssemblies" AfterTargets="ResolveReferences">
+        <ItemGroup>
+            <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)"
+                                     Condition="'%(ReferenceCopyLocalPaths.Filename)' == 'CitizenFX.Base'
+                    or '%(ReferenceCopyLocalPaths.Filename)' == 'MessagePack'
+                    or '%(ReferenceCopyLocalPaths.Filename)' == 'MessagePack.Annotations'
+                    or '%(ReferenceCopyLocalPaths.Filename)' == 'Microsoft.NET.StringTools'" />
+        </ItemGroup>
+    </Target>
+
+    <!-- Drops fxmanifest.lua next to /client and /server in the build output, regardless
+         of which project (Client or Server) is built. -->
+    <ItemGroup>
+        <None Include="$(MSBuildThisFileDirectory)..\assets\fxmanifest.lua" CopyToOutputDirectory="PreserveNewest" Link="..\fxmanifest.lua" />
+    </ItemGroup>
+
+</Project>

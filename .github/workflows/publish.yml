@@ -1,0 +1,60 @@
+name: Publish NuGet template
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "content/**"
+      - "*.csproj"
+      - ".github/workflows/publish.yml"
+  workflow_dispatch: {}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # required so the job can request a GitHub OIDC token for NuGet Trusted Publishing
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      # Every push to main bumps the patch/build number automatically, so
+      # you never have to remember to edit a version number by hand.
+      # OFFSET is set so the *next* run comes out as 1.0.0 - see chat/README
+      # for how OFFSET was picked; bump it again if you ever need to reset.
+      - name: Compute package version
+        id: version
+        run: |
+          OFFSET=10
+          echo "version=1.0.$(( ${{ github.run_number }} - OFFSET ))" >> "$GITHUB_OUTPUT"
+
+      - name: Pack template
+        run: dotnet pack ./FiveM.ScriptTemplate.CSharp.csproj -c Release -p:PackageVersion=${{ steps.version.outputs.version }} -o ./nupkg
+
+      # Sanity-check the package actually installs and can scaffold a
+      # project before it goes anywhere near nuget.org.
+      - name: Validate template installs and instantiates
+        run: |
+          dotnet new install ./nupkg/*.nupkg
+          dotnet new fivem-template -n SmokeTest -o /tmp/smoke-test
+          test -f /tmp/smoke-test/src/Client/SmokeTest.Client/Main.cs
+          test -f /tmp/smoke-test/src/Server/SmokeTest.Server/Main.cs
+
+      # Exchanges this run's GitHub OIDC token for a short-lived (~1 hour) NuGet
+      # API key, per the Trusted Publishing policy configured on nuget.org.
+      # No stored secret needed — nothing to leak, nothing to rotate.
+      - name: NuGet login (OIDC -> temporary API key)
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Push to NuGet.org
+        run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ steps.nuget-login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
