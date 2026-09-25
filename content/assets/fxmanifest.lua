@@ -7,8 +7,8 @@ version '0.0.1'
 author 'TemplateResourceAuthor'
 
 files {
-    'CitizenFX.FiveM.Shared.dll',
-    'CitizenFX.FiveM.Client.dll',    
+    'client/CitizenFX.FiveM.Shared.dll',
+    'client/CitizenFX.FiveM.Client.dll'
 }
 
 server_script 'server/Template.Server.dll'
